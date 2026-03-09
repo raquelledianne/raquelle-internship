@@ -57,10 +57,10 @@ const HotCollections = () => {
 <OwlCarousel className="owl-theme" {...options}>
   {collections.length > 0
     ? collections.map((item) => (
-        <div className="item" key={item.nftId || item.title}>
+        <div className="item" key={item.id || item.title}>
           <div className="nft_coll">
             <div className="nft_wrap">
-              <Link to={`/item-details/${item.nftId}`} state={{ item }}>
+              <Link to={`/item-details/${item.id}`} state={{ item }}>
                 <img src={item.nftImage} alt={item.title} />
               </Link>
             </div>
@@ -71,7 +71,7 @@ const HotCollections = () => {
               <i className="fa fa-check"></i>
             </div>
             <div className="nft_coll_info">
-              <Link to={`/item-details/${item.nftId}`} state={{ item }}>
+              <Link to={`/item-details/${item.id}`} state={{ item }}>
                 <h4>{item.title}</h4>
               </Link>
               <span>{item.code}</span>

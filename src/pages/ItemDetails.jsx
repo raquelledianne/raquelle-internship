@@ -6,7 +6,7 @@ const API_URL =
   "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems";
 
 const ItemDetails = () => {
-  const { id } = useParams();
+  const { nftId: id } = useParams();
   const [item, setItem] = useState(null);
 
   useEffect(() => {

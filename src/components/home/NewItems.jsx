@@ -29,7 +29,7 @@ const NewItems = () => {
       });
   }, []);
 
-  // update countdown every second
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeNow(Date.now());
