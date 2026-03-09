@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
@@ -9,15 +11,44 @@ const API_URL =
 
 const NewItems = () => {
   const [items, setItems] = useState([]);
+  const [timeNow, setTimeNow] = useState(Date.now());
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
-        setItems(data);
+        setTimeout(() => {
+          setItems(data);
+          setLoading(false);
+        }, 1000);
       })
-      .catch((err) => console.error("API Error:", err));
+      .catch((err) => {
+        console.error("API Error:", err);
+        setLoading(false);
+      });
   }, []);
+
+  // update countdown every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeNow(Date.now());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const getTimeRemaining = (expiryDate) => {
+    const diff = expiryDate - timeNow;
+
+    if (diff <= 0) return "Auction ended";
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  };
 
   const options = {
     loop: true,
@@ -31,6 +62,8 @@ const NewItems = () => {
     },
   };
 
+  const skeletonCards = new Array(4).fill(0);
+
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
@@ -41,49 +74,80 @@ const NewItems = () => {
         </div>
 
         <OwlCarousel className="owl-theme" {...options}>
-          {items.map((item) => (
-            <div className="item" key={item.id}>
-              <div className="nft__item">
+          
+          {loading
+            ? skeletonCards.map((_, i) => (
+                <div className="item" key={i}>
+                  <div className="nft__item">
 
-                <div className="author_list_pp">
-                  <Link to={`/author/${item.authorId}`}>
-                    <img
-                      className="lazy"
-                      src={item.authorImage}
-                      alt="author"
-                    />
-                    <i className="fa fa-check"></i>
-                  </Link>
-                </div>
+                    <div className="author_list_pp">
+                      <Skeleton circle height={40} width={40} />
+                    </div>
 
-                <div className="nft__item_wrap">
-                  <Link to={`/item-details/${item.id}`}>
-                    <img
-                      src={item.nftImage}
-                      className="lazy nft__item_preview"
-                      alt={item.title}
-                    />
-                  </Link>
-                </div>
+                    <div className="nft__item_wrap">
+                      <Skeleton height={200} />
+                    </div>
 
-                <div className="nft__item_info">
-                  <Link to={`/item-details/${item.id}`}>
-                    <h4>{item.title}</h4>
-                  </Link>
+                    <div className="nft__item_countdown">
+                      <Skeleton height={20} width={80} />
+                    </div>
 
-                  <div className="nft__item_price">
-                    {item.price} ETH
-                  </div>
+                    <div className="nft__item_info">
+                      <Skeleton height={20} width="80%" />
+                      <Skeleton height={20} width="40%" />
+                    </div>
 
-                  <div className="nft__item_like">
-                    <i className="fa fa-heart"></i>
-                    <span>{item.likes}</span>
                   </div>
                 </div>
+              ))
+            : items.map((item) => (
+                <div className="item" key={item.id}>
+                  <div className="nft__item">
 
-              </div>
-            </div>
-          ))}
+                    <div className="author_list_pp">
+                      <Link to={`/author/${item.authorId}`}>
+                        <img
+                          className="lazy"
+                          src={item.authorImage}
+                          alt="author"
+                        />
+                        <i className="fa fa-check"></i>
+                      </Link>
+                    </div>
+
+                    <div className="nft__item_wrap">
+                      <Link to={`/item-details/${item.id}`}>
+                        <img
+                          src={item.nftImage}
+                          className="lazy nft__item_preview"
+                          alt={item.title}
+                        />
+                      </Link>
+                    </div>
+
+                    <div className="nft__item_countdown">
+                      {getTimeRemaining(item.expiryDate)}
+                    </div>
+
+                    <div className="nft__item_info">
+                      <Link to={`/item-details/${item.id}`}>
+                        <h4>{item.title}</h4>
+                      </Link>
+
+                      <div className="nft__item_price">
+                        {item.price} ETH
+                      </div>
+
+                      <div className="nft__item_like">
+                        <i className="fa fa-heart"></i>
+                        <span>{item.likes}</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
+
         </OwlCarousel>
 
       </div>
