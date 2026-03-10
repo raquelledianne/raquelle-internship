@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import EthImage from "../images/ethereum.svg";
-import { Link, useParams } from "react-router-dom";
-
-const API_URL =
-  "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems";
 
 const ItemDetails = () => {
-  const { nftId: id } = useParams();
+  const { nftId } = useParams();
   const [item, setItem] = useState(null);
 
   useEffect(() => {
@@ -14,24 +11,23 @@ const ItemDetails = () => {
 
     const fetchItem = async () => {
       try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-
-        const selectedItem = data.find(
-          (nft) => String(nft.id || nft.nftId) === id
+        const res = await fetch(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${nftId}`
         );
 
-        setItem(selectedItem);
+        const data = await res.json();
+
+        setItem(data);
       } catch (err) {
         console.error("API error:", err);
       }
     };
 
     fetchItem();
-  }, [id]);
+  }, [nftId]);
 
   if (!item) {
-    return <div className="container mt-5">NFT not found</div>;
+    return <div className="container mt-5">Loading NFT...</div>;
   }
 
   return (
