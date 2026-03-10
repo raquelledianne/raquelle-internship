@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import Skeleton from "react-loading-skeleton";
+import Countdown from "../countdown"
+
 import "react-loading-skeleton/dist/skeleton.css";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
@@ -11,7 +13,6 @@ const API_URL =
 
 const NewItems = () => {
   const [items, setItems] = useState([]);
-  const [timeNow, setTimeNow] = useState(Date.now());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,27 +29,6 @@ const NewItems = () => {
         setLoading(false);
       });
   }, []);
-
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeNow(Date.now());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const getTimeRemaining = (expiryDate) => {
-    const diff = expiryDate - timeNow;
-
-    if (diff <= 0) return "Auction ended";
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    return `${hours}h ${minutes}m ${seconds}s`;
-  };
 
   const options = {
     loop: true,
@@ -74,7 +54,7 @@ const NewItems = () => {
         </div>
 
         <OwlCarousel className="owl-theme" {...options}>
-          
+
           {loading
             ? skeletonCards.map((_, i) => (
                 <div className="item" key={i}>
@@ -104,6 +84,7 @@ const NewItems = () => {
                 <div className="item" key={item.id}>
                   <div className="nft__item">
 
+                    {/* Author */}
                     <div className="author_list_pp">
                       <Link to={`/author/${item.authorId}`}>
                         <img
@@ -115,6 +96,7 @@ const NewItems = () => {
                       </Link>
                     </div>
 
+                    
                     <div className="nft__item_wrap">
                       <Link to={`/item-details/${item.id}`}>
                         <img
@@ -125,10 +107,12 @@ const NewItems = () => {
                       </Link>
                     </div>
 
+                    
                     <div className="nft__item_countdown">
-                      {getTimeRemaining(item.expiryDate)}
+                      <Countdown expiryDate={item.expiryDate} />
                     </div>
 
+                    
                     <div className="nft__item_info">
                       <Link to={`/item-details/${item.id}`}>
                         <h4>{item.title}</h4>
