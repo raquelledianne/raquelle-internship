@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import Skeleton from "react-loading-skeleton";
-import Countdown from "../countdown"
+import Countdown from "../countdown";
 
 import "react-loading-skeleton/dist/skeleton.css";
 import "owl.carousel/dist/assets/owl.carousel.css";
@@ -16,18 +16,23 @@ const NewItems = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchItems = async () => {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        // simulate loading skeleton for 1 second
         setTimeout(() => {
-          setItems(data);
+          setItems(data || []);
           setLoading(false);
         }, 1000);
-      })
-      .catch((err) => {
-        console.error("API Error:", err);
+      } catch (error) {
+        console.error("NewItems API error:", error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchItems();
   }, []);
 
   const options = {
@@ -53,86 +58,95 @@ const NewItems = () => {
           <div className="small-border bg-color-2"></div>
         </div>
 
-        <OwlCarousel className="owl-theme" {...options}>
+        {loading ? (
+          /* Skeleton loading state */
+          <div className="row">
+            {skeletonCards.map((_, index) => (
+              <div
+                key={index}
+                className="col-lg-3 col-md-6 col-sm-6 col-xs-12"
+              >
+                <div className="nft__item">
 
-          {loading
-            ? skeletonCards.map((_, i) => (
-                <div className="item" key={i}>
-                  <div className="nft__item">
+                  <div className="author_list_pp">
+                    <Skeleton circle height={40} width={40} />
+                  </div>
 
-                    <div className="author_list_pp">
-                      <Skeleton circle height={40} width={40} />
+                  <div className="nft__item_wrap">
+                    <Skeleton height={200} />
+                  </div>
+
+                  <div className="nft__item_countdown">
+                    <Skeleton height={20} width={80} />
+                  </div>
+
+                  <div className="nft__item_info">
+                    <Skeleton height={20} width="80%" />
+                    <Skeleton height={20} width="40%" />
+                  </div>
+
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Carousel once data loads */
+          <OwlCarousel className="owl-theme" {...options}>
+            {items.map((item) => (
+              <div className="item" key={item.id}>
+                <div className="nft__item">
+
+                  {/* Author */}
+                  <div className="author_list_pp">
+                    <Link to={`/author/${item.authorId}`}>
+                      <img
+                        src={item.authorImage}
+                        className="lazy"
+                        alt="author"
+                      />
+                      <i className="fa fa-check"></i>
+                    </Link>
+                  </div>
+
+                  {/* NFT Image */}
+                  <div className="nft__item_wrap">
+                    <Link to={`/item-details/${item.id}`}>
+                      <img
+                        src={item.nftImage}
+                        className="lazy nft__item_preview"
+                        alt={item.title}
+                      />
+                    </Link>
+                  </div>
+
+                  {/* Countdown */}
+                  {item.expiryDate && (
+                    <Countdown expiryDate={Number(item.expiryDate)} />
+                  )}
+
+                  {/* NFT Info */}
+                  <div className="nft__item_info">
+
+                    <Link to={`/item-details/${item.id}`}>
+                      <h4>{item.title}</h4>
+                    </Link>
+
+                    <div className="nft__item_price">
+                      {item.price} ETH
                     </div>
 
-                    <div className="nft__item_wrap">
-                      <Skeleton height={200} />
-                    </div>
-
-                    <div className="nft__item_countdown">
-                      <Skeleton height={20} width={80} />
-                    </div>
-
-                    <div className="nft__item_info">
-                      <Skeleton height={20} width="80%" />
-                      <Skeleton height={20} width="40%" />
+                    <div className="nft__item_like">
+                      <i className="fa fa-heart"></i>
+                      <span>{item.likes}</span>
                     </div>
 
                   </div>
+
                 </div>
-              ))
-            : items.map((item) => (
-                <div className="item" key={item.id}>
-                  <div className="nft__item">
-
-                    {/* Author */}
-                    <div className="author_list_pp">
-                      <Link to={`/author/${item.authorId}`}>
-                        <img
-                          className="lazy"
-                          src={item.authorImage}
-                          alt="author"
-                        />
-                        <i className="fa fa-check"></i>
-                      </Link>
-                    </div>
-
-                    
-                    <div className="nft__item_wrap">
-                      <Link to={`/item-details/${item.id}`}>
-                        <img
-                          src={item.nftImage}
-                          className="lazy nft__item_preview"
-                          alt={item.title}
-                        />
-                      </Link>
-                    </div>
-
-                    
-                    <div className="nft__item_countdown">
-                      <Countdown expiryDate={item.expiryDate} />
-                    </div>
-
-                    
-                    <div className="nft__item_info">
-                      <Link to={`/item-details/${item.id}`}>
-                        <h4>{item.title}</h4>
-                      </Link>
-
-                      <div className="nft__item_price">
-                        {item.price} ETH
-                      </div>
-
-                      <div className="nft__item_like">
-                        <i className="fa fa-heart"></i>
-                        <span>{item.likes}</span>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              ))}
-
-        </OwlCarousel>
+              </div>
+            ))}
+          </OwlCarousel>
+        )}
 
       </div>
     </section>
