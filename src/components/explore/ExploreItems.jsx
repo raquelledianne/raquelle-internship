@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import AOS from "aos";
 
-const ExploreItems = ({ items, loading }) => {
+const ExploreItems = ({ items, loading, authorId, nftId }) => {
   const [filter, setFilter] = useState("");
   const [visible, setVisible] = useState(8);
 
@@ -80,7 +80,7 @@ const ExploreItems = ({ items, loading }) => {
 
                 
                 <div className="author_list_pp">
-                  <Link to={`/author/${item.authorId}`}>
+                  <Link to={`/author/${authorId}`}>
                     <img
                       className="lazy"
                       src={item.authorImage}
@@ -95,7 +95,7 @@ const ExploreItems = ({ items, loading }) => {
 
                 
                 <div className="nft__item_wrap">
-                  <Link to={`/item-details/${item.nftId}`}>
+                  <Link to={`/item-details/${nftId}`}>
                     <img
                       src={item.nftImage}
                       className="lazy nft__item_preview"

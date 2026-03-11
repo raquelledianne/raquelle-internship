@@ -11,7 +11,7 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 const API_URL =
   "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems";
 
-const NewItems = () => {
+const NewItems = ({ authorId, nftId }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -98,7 +98,7 @@ const NewItems = () => {
 
                  
                   <div className="author_list_pp">
-                    <Link to={`/author/${item.authorId}`}>
+                    <Link to={`/author/${authorId}`}>
                       <img
                         src={item.authorImage}
                         className="lazy"
@@ -110,7 +110,7 @@ const NewItems = () => {
 
                   
                   <div className="nft__item_wrap">
-                    <Link to={`/item-details/${item.nftId}`}>
+                    <Link to={`/item-details/${nftId}`}>
                       <img
                         src={item.nftImage}
                         className="lazy nft__item_preview"
@@ -127,7 +127,7 @@ const NewItems = () => {
                   
                   <div className="nft__item_info">
 
-                    <Link to={`/item-details/${item.nftId}`}>
+                    <Link to={`/item-details/${nftId}`}>
                       <h4>{item.title}</h4>
                     </Link>
 
