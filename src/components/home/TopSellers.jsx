@@ -2,23 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const API_URL =
   "https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers";
 
 const TopSellers = () => {
   const [authors, setAuthors] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+
     const fetchAuthors = async () => {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-       
+
         setTimeout(() => {
           setAuthors(data);
           setLoading(false);
+
+          // Refresh AOS after content renders
+          setTimeout(() => {
+            AOS.refresh();
+          }, 100);
         }, 1000);
       } catch (err) {
         console.error("API error:", err);
@@ -29,14 +38,15 @@ const TopSellers = () => {
     fetchAuthors();
   }, []);
 
-  const skeletons = new Array(12).fill(0); 
+  const skeletons = new Array(12).fill(0);
 
   return (
     <section id="section-popular" className="pb-5">
       <div className="container">
         <div className="row">
+
           <div className="col-lg-12">
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up">
               <h2>Top Sellers</h2>
               <div className="small-border bg-color-2"></div>
             </div>
@@ -46,7 +56,11 @@ const TopSellers = () => {
             <ol className="author_list">
               {loading
                 ? skeletons.map((_, index) => (
-                    <li key={index}>
+                    <li
+                      key={index}
+                      data-aos="fade-left"
+                      data-aos-delay={index * 50}
+                    >
                       <div className="author_list_pp">
                         <Skeleton circle height={50} width={50} />
                       </div>
@@ -56,8 +70,12 @@ const TopSellers = () => {
                       </div>
                     </li>
                   ))
-                : authors.map((author) => (
-                    <li key={author.id}>
+                : authors.map((author, index) => (
+                    <li
+                      key={author.id}
+                      data-aos="fade-left"
+                      data-aos-delay={index * 50}
+                    >
                       <div className="author_list_pp">
                         <Link to={`/author/${author.authorId}`}>
                           <img
@@ -69,13 +87,14 @@ const TopSellers = () => {
                         </Link>
                       </div>
                       <div className="author_list_info">
-                        <Link to={`/author/${author.authorIdd}`}>{author.authorName}</Link>
+                        <Link to={`/author/${author.authorId}`}>{author.authorName}</Link>
                         <span>{author.totalVolume} ETH</span>
                       </div>
                     </li>
                   ))}
             </ol>
           </div>
+
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Countdown from "../countdown";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import AOS from "aos";
 
 const ExploreItems = ({ items, loading }) => {
   const [filter, setFilter] = useState("");
@@ -15,9 +16,12 @@ const ExploreItems = ({ items, loading }) => {
     return 0;
   });
 
-  const loadMore = () => {
-    setVisible((prev) => prev + 4);
-  };
+ const loadMore = () => {
+  setVisible((prev) => prev + 4);
+  setTimeout(() => {
+    AOS.refresh();
+  }, 100);
+};
 
   const skeletonCards = new Array(8).fill(0);
 
@@ -64,11 +68,13 @@ const ExploreItems = ({ items, loading }) => {
               </div>
             </div>
           ))
-        : sortedItems.slice(0, visible).map((item) => (
-            <div
-              key={item.id}
-              className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-              style={{ display: "block", backgroundSize: "cover" }}
+        : sortedItems.slice(0, visible).map((item, i) => (
+        <div
+    key={item.id}
+    className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+    data-aos="fade-up"
+    data-aos-delay={i * 100}
+    style={{ display: "block", backgroundSize: "cover" }}
             >
               <div className="nft__item">
 
