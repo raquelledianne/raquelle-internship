@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const AuthorItems = ({ items, author, loading = false }) => {
+const AuthorItems = ({ items, author, authorId, loading = false }) => {
   const skeletonCards = new Array(8).fill(0);
 
   if (!items && !loading) {
@@ -42,7 +42,7 @@ const AuthorItems = ({ items, author, loading = false }) => {
                   <div className="nft__item">
                     
                     <div className="author_list_pp">
-                      <Link to={`/author/${author.authorId}`}>
+                      <Link to={`/author/${authorId}`}>
                         <img
                           className="lazy"
                           src={author.authorImage}

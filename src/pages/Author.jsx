@@ -100,7 +100,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems items={nfts} author={author} />
+                  <AuthorItems items={nfts} author={author} authorId={authorId}/>
                 </div>
               </div>
 
