@@ -21,7 +21,7 @@ const NewItems = () => {
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        // simulate loading skeleton for 1 second
+       
         setTimeout(() => {
           setItems(data || []);
           setLoading(false);
@@ -59,7 +59,7 @@ const NewItems = () => {
         </div>
 
         {loading ? (
-          /* Skeleton loading state */
+          
           <div className="row">
             {skeletonCards.map((_, index) => (
               <div
@@ -90,13 +90,13 @@ const NewItems = () => {
             ))}
           </div>
         ) : (
-          /* Carousel once data loads */
+          
           <OwlCarousel className="owl-theme" {...options}>
             {items.map((item) => (
               <div className="item" key={item.id}>
                 <div className="nft__item">
 
-                  {/* Author */}
+                 
                   <div className="author_list_pp">
                     <Link to={`/author/${item.authorId}`}>
                       <img
@@ -108,9 +108,9 @@ const NewItems = () => {
                     </Link>
                   </div>
 
-                  {/* NFT Image */}
+                  
                   <div className="nft__item_wrap">
-                    <Link to={`/item-details/${item.id}`}>
+                    <Link to={`/item-details/${item.nftId}`}>
                       <img
                         src={item.nftImage}
                         className="lazy nft__item_preview"
@@ -119,15 +119,15 @@ const NewItems = () => {
                     </Link>
                   </div>
 
-                  {/* Countdown */}
+                  
                   {item.expiryDate && (
                     <Countdown expiryDate={Number(item.expiryDate)} />
                   )}
 
-                  {/* NFT Info */}
+                  
                   <div className="nft__item_info">
 
-                    <Link to={`/item-details/${item.id}`}>
+                    <Link to={`/item-details/${item.nftId}`}>
                       <h4>{item.title}</h4>
                     </Link>
 

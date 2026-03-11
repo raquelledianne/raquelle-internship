@@ -72,7 +72,7 @@ const ExploreItems = ({ items, loading }) => {
             >
               <div className="nft__item">
 
-                {/* Author */}
+                
                 <div className="author_list_pp">
                   <Link to={`/author/${item.authorId}`}>
                     <img
@@ -84,10 +84,10 @@ const ExploreItems = ({ items, loading }) => {
                   </Link>
                 </div>
 
-                {/* Countdown */}
+                
                 <Countdown expiryDate={item.expiryDate} />
 
-                {/* NFT Image */}
+                
                 <div className="nft__item_wrap">
                   <Link to={`/item-details/${item.nftId}`}>
                     <img
@@ -98,7 +98,7 @@ const ExploreItems = ({ items, loading }) => {
                   </Link>
                 </div>
 
-                {/* NFT Info */}
+                
                 <div className="nft__item_info">
                   <Link to={`/item-details/${item.nftId}`}>
                     <h4>{item.title}</h4>
