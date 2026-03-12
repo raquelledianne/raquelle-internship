@@ -1,10 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SubHeader from "../images/subheader.jpg";
 import ExploreItems from "../components/explore/ExploreItems";
 
+const API_URL =
+  "https://us-central1-nft-cloud-functions.cloudfunctions.net/explore";
+
 const Explore = () => {
+  const [items, setItems] = useState([]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const fetchExploreItems = async () => {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        setItems(data);
+      } catch (err) {
+        console.error("Explore API error:", err);
+      }
+    };
+
+    fetchExploreItems();
   }, []);
 
   return (
@@ -32,7 +49,7 @@ const Explore = () => {
         <section aria-label="section">
           <div className="container">
             <div className="row">
-              <ExploreItems />
+              <ExploreItems items={items} />
             </div>
           </div>
         </section>

@@ -4,12 +4,14 @@ const HeaderExplore = () => {
   return (
     <div className="col-lg-12">
       <div className="items_filter">
+
         <form
           action="blank.php"
           className="row form-dark"
           id="form_quick_search"
           method="post"
           name="form_quick_search"
+          data-aos="fade-up"
         >
           <div className="col text-center">
             <input
@@ -18,7 +20,7 @@ const HeaderExplore = () => {
               name="name_1"
               placeholder="search item here..."
               type="text"
-            />{" "}
+            />
             <a href="#" id="btn-submit">
               <i className="fa fa-search bg-color-secondary"></i>
             </a>
@@ -26,7 +28,12 @@ const HeaderExplore = () => {
           </div>
         </form>
 
-        <div id="item_category" className="dropdown">
+        <div
+          id="item_category"
+          className="dropdown"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
           <a href="#" className="btn-selector">
             All categories
           </a>
@@ -34,34 +41,23 @@ const HeaderExplore = () => {
             <li className="active">
               <span>All categories</span>
             </li>
-            <li>
-              <span>Art</span>
-            </li>
-            <li>
-              <span>Music</span>
-            </li>
-            <li>
-              <span>Domain Names</span>
-            </li>
-            <li>
-              <span>Virtual World</span>
-            </li>
-            <li>
-              <span>Trading Cards</span>
-            </li>
-            <li>
-              <span>Collectibles</span>
-            </li>
-            <li>
-              <span>Sports</span>
-            </li>
-            <li>
-              <span>Utility</span>
-            </li>
+            <li><span>Art</span></li>
+            <li><span>Music</span></li>
+            <li><span>Domain Names</span></li>
+            <li><span>Virtual World</span></li>
+            <li><span>Trading Cards</span></li>
+            <li><span>Collectibles</span></li>
+            <li><span>Sports</span></li>
+            <li><span>Utility</span></li>
           </ul>
         </div>
 
-        <div id="buy_category" className="dropdown">
+        <div
+          id="buy_category"
+          className="dropdown"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
           <a href="#" className="btn-selector">
             Buy Now
           </a>
@@ -78,7 +74,12 @@ const HeaderExplore = () => {
           </ul>
         </div>
 
-        <div id="items_type" className="dropdown">
+        <div
+          id="items_type"
+          className="dropdown"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
           <a href="#" className="btn-selector">
             All Items
           </a>
@@ -94,6 +95,7 @@ const HeaderExplore = () => {
             </li>
           </ul>
         </div>
+
       </div>
     </div>
   );
