@@ -8,10 +8,9 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const HotCollections = () => {
-  const [collections, setCollections] = useState([]); 
+  const [collections, setCollections] = useState([]);
 
   useEffect(() => {
-  
     const fetchData = async () => {
       try {
         const res = await axios.get(
@@ -19,12 +18,11 @@ const HotCollections = () => {
         );
 
         setTimeout(() => {
-          setCollections(res.data);
-          setLoading(false);
+          setCollections(res.data || []);
         }, 1000);
+
       } catch (err) {
         console.error("Failed to fetch Hot Collections:", err);
-        setLoading(false);
       }
     };
 
@@ -53,48 +51,56 @@ const HotCollections = () => {
           <div className="small-border bg-color-2"></div>
         </div>
 
-<OwlCarousel className="owl-theme" {...options}>
-  {collections.length > 0
-    ? collections.map((item) => (
-        <div className="item" key={item.id || item.title}>
-          <div className="nft_coll">
-            <div className="nft_wrap">
-              <Link to={`/item-details/${item.nftId}`} state={{ item }}>
-                <img src={item.nftImage} alt={item.title} />
-              </Link>
-            </div>
-            <div className="nft_coll_pp">
-              <Link to={`/author/${item.authorId}`}>
-                <img className="pp-coll" src={item.authorImage} alt="author" />
-              </Link>
-              <i className="fa fa-check"></i>
-            </div>
-            <div className="nft_coll_info">
-              <Link to={`/item-details/${item.nftId}`} state={{ item }}>
-                <h4>{item.title}</h4>
-              </Link>
-              <span>{item.code}</span>
-            </div>
-          </div>
-        </div>
-      ))
-    : skeletons.map((_, i) => (
-        <div className="item" key={i}>
-          <div className="nft_coll">
-            <div className="nft_wrap">
-              <Skeleton height={200} />
-            </div>
-            <div className="nft_coll_pp">
-              <Skeleton circle height={50} width={50} />
-            </div>
-            <div className="nft_coll_info">
-              <Skeleton height={20} width="80%" />
-              <Skeleton height={15} width="50%" />
-            </div>
-          </div>
-        </div>
-      ))}
-</OwlCarousel>
+        <OwlCarousel className="owl-theme" {...options}>
+          {collections.length > 0
+            ? collections.map((item) => (
+                <div className="item" key={item.id || item.title}>
+                  <div className="nft_coll">
+                    <div className="nft_wrap">
+                      <Link to={`/item-details/${item.nftId}`} state={{ item }}>
+                        <img src={item.nftImage} alt={item.title} />
+                      </Link>
+                    </div>
+
+                    <div className="nft_coll_pp">
+                      <Link to={`/author/${item.authorId}`}>
+                        <img
+                          className="pp-coll"
+                          src={item.authorImage}
+                          alt="author"
+                        />
+                      </Link>
+                      <i className="fa fa-check"></i>
+                    </div>
+
+                    <div className="nft_coll_info">
+                      <Link to={`/item-details/${item.nftId}`} state={{ item }}>
+                        <h4>{item.title}</h4>
+                      </Link>
+                      <span>{item.code}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            : skeletons.map((_, i) => (
+                <div className="item" key={i}>
+                  <div className="nft_coll">
+                    <div className="nft_wrap">
+                      <Skeleton height={200} />
+                    </div>
+
+                    <div className="nft_coll_pp">
+                      <Skeleton circle height={50} width={50} />
+                    </div>
+
+                    <div className="nft_coll_info">
+                      <Skeleton height={20} width="80%" />
+                      <Skeleton height={15} width="50%" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+        </OwlCarousel>
       </div>
     </section>
   );
