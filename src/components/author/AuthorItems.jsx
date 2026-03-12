@@ -1,15 +1,16 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const AuthorItems = ({ items, author, authorId, loading = false }) => {
+const AuthorItems = ({ items = [], author, authorId, loading = false }) => {
   const skeletonCards = new Array(8).fill(0);
 
   if (!items && !loading) {
     return <div className="text-center">This author has no NFTs yet.</div>;
   }
+
+  const safeLink = (id, fallback = "#") => (id ? id : fallback);
 
   return (
     <div className="de_tab_content">
@@ -41,38 +42,44 @@ const AuthorItems = ({ items, author, authorId, loading = false }) => {
                   className="col-lg-3 col-md-6 col-sm-6 col-xs-12"
                 >
                   <div className="nft__item">
-                    
                     <div className="author_list_pp">
-                      <Link to={`/author/${authorId}`}>
+                      <Link
+                        to={`/author/${safeLink(authorId)}`}
+                        aria-label={`Go to ${author?.authorName || "author"} page`}
+                      >
                         <img
                           className="lazy"
-                          src={author.authorImage}
-                          alt={author.authorName}
+                          src={author?.authorImage || "/fallback-avatar.png"}
+                          alt={author?.authorName || "author"}
                         />
                         <i className="fa fa-check"></i>
                       </Link>
                     </div>
 
-                    
                     <div className="nft__item_wrap">
-                      <Link to={`/item-details/${item.nftId}`}>
+                      <Link
+                        to={`/item-details/${safeLink(item.nftId)}`}
+                        aria-label={`Go to ${item.title || "item"} details`}
+                      >
                         <img
-                          src={item.nftImage}
+                          src={item.nftImage || "/fallback-item.png"}
                           className="lazy nft__item_preview"
-                          alt={item.title}
+                          alt={item.title || "item"}
                         />
                       </Link>
                     </div>
 
-                    
                     <div className="nft__item_info">
-                      <Link to={`/item-details/${item.nftId}`}>
-                        <h4>{item.title}</h4>
+                      <Link
+                        to={`/item-details/${safeLink(item.nftId)}`}
+                        aria-label={`Go to ${item.title || "item"} details`}
+                      >
+                        <h4>{item.title || "Untitled"}</h4>
                       </Link>
-                      <div className="nft__item_price">{item.price} ETH</div>
+                      <div className="nft__item_price">{item.price || 0} ETH</div>
                       <div className="nft__item_like">
                         <i className="fa fa-heart"></i>
-                        <span>{item.likes}</span>
+                        <span>{item.likes || 0}</span>
                       </div>
                     </div>
                   </div>

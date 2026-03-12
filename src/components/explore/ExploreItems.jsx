@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Countdown from "../countdown";
@@ -6,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import AOS from "aos";
 
-const ExploreItems = ({ items, loading }) => {
+const ExploreItems = ({ items = [], loading }) => {
   const [filter, setFilter] = useState("");
   const [visible, setVisible] = useState(8);
 
@@ -17,14 +16,14 @@ const ExploreItems = ({ items, loading }) => {
     return 0;
   });
 
- const loadMore = () => {
-  setVisible((prev) => prev + 4);
-  setTimeout(() => {
-    AOS.refresh();
-  }, 100);
-};
+  const loadMore = () => {
+    setVisible((prev) => prev + 4);
+    setTimeout(() => AOS.refresh(), 100);
+  };
 
   const skeletonCards = new Array(8).fill(0);
+
+  const safeLink = (id, fallback = "#") => (id ? id : fallback);
 
   return (
     <>
@@ -48,7 +47,6 @@ const ExploreItems = ({ items, loading }) => {
               className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
             >
               <div className="nft__item">
-
                 <div className="author_list_pp">
                   <Skeleton circle height={40} width={40} />
                 </div>
@@ -65,62 +63,62 @@ const ExploreItems = ({ items, loading }) => {
                   <Skeleton height={20} width="80%" />
                   <Skeleton height={20} width="40%" />
                 </div>
-
               </div>
             </div>
           ))
         : sortedItems.slice(0, visible).map((item, i) => (
-        <div
-    key={item.id}
-    className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-    data-aos="fade-up"
-    data-aos-delay={i * 100}
-    style={{ display: "block", backgroundSize: "cover" }}
+            <div
+              key={item.id || i}
+              className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+              data-aos="fade-up"
+              data-aos-delay={i * 100}
+              style={{ display: "block", backgroundSize: "cover" }}
             >
               <div className="nft__item">
-
-                
                 <div className="author_list_pp">
-                  <Link to={`/author/${item.authorId}`}>
+                  <Link
+                    to={`/author/${safeLink(item.authorId)}`}
+                    aria-label={`Go to ${item.authorName || "author"} page`}
+                  >
                     <img
                       className="lazy"
-                      src={item.authorImage}
-                      alt={item.authorName}
+                      src={item.authorImage || "/fallback-avatar.png"}
+                      alt={item.authorName || "author"}
                     />
                     <i className="fa fa-check"></i>
                   </Link>
                 </div>
 
-                
                 <Countdown expiryDate={item.expiryDate} />
 
-                
                 <div className="nft__item_wrap">
-                  <Link to={`/item-details/${item.nftId}`}>
+                  <Link
+                    to={`/item-details/${safeLink(item.nftId)}`}
+                    aria-label={`Go to ${item.title || "item"} details`}
+                  >
                     <img
-                      src={item.nftImage}
+                      src={item.nftImage || "/fallback-item.png"}
                       className="lazy nft__item_preview"
-                      alt={item.title}
+                      alt={item.title || "item"}
                     />
                   </Link>
                 </div>
 
-                
                 <div className="nft__item_info">
-                  <Link to={`/item-details/${item.nftId}`}>
-                    <h4>{item.title}</h4>
+                  <Link
+                    to={`/item-details/${safeLink(item.nftId)}`}
+                    aria-label={`Go to ${item.title || "item"} details`}
+                  >
+                    <h4>{item.title || "Untitled"}</h4>
                   </Link>
 
-                  <div className="nft__item_price">
-                    {item.price} ETH
-                  </div>
+                  <div className="nft__item_price">{item.price || 0} ETH</div>
 
                   <div className="nft__item_like">
                     <i className="fa fa-heart"></i>
-                    <span>{item.likes}</span>
+                    <span>{item.likes || 0}</span>
                   </div>
                 </div>
-
               </div>
             </div>
           ))}
