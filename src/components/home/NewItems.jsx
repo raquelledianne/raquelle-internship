@@ -20,6 +20,8 @@ const NewItems = () => {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
+
+       
         setTimeout(() => {
           setItems(data || []);
           setLoading(false);
@@ -29,6 +31,7 @@ const NewItems = () => {
         setLoading(false);
       }
     };
+
     fetchItems();
   }, []);
 
@@ -46,17 +49,17 @@ const NewItems = () => {
 
   const skeletonCards = new Array(4).fill(0);
 
-  const safeLink = (id, fallback = "#") => (id ? id : fallback);
-
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
+
         <div className="text-center">
           <h2>New Items</h2>
           <div className="small-border bg-color-2"></div>
         </div>
 
         {loading ? (
+          
           <div className="row">
             {skeletonCards.map((_, index) => (
               <div
@@ -64,75 +67,87 @@ const NewItems = () => {
                 className="col-lg-3 col-md-6 col-sm-6 col-xs-12"
               >
                 <div className="nft__item">
+
                   <div className="author_list_pp">
                     <Skeleton circle height={40} width={40} />
                   </div>
+
                   <div className="nft__item_wrap">
                     <Skeleton height={200} />
                   </div>
+
                   <div className="nft__item_countdown">
                     <Skeleton height={20} width={80} />
                   </div>
+
                   <div className="nft__item_info">
                     <Skeleton height={20} width="80%" />
                     <Skeleton height={20} width="40%" />
                   </div>
+
                 </div>
               </div>
             ))}
           </div>
         ) : (
+          
           <OwlCarousel className="owl-theme" {...options}>
             {items.map((item) => (
               <div className="item" key={item.id}>
                 <div className="nft__item">
+
+                 
                   <div className="author_list_pp">
-                    <Link
-                      to={`/author/${safeLink(item.authorId)}`}
-                      aria-label={`Go to ${item.authorName || "author"} page`}
-                    >
+                    <Link to={`/author/${item.authorId}`}>
                       <img
-                        src={item.authorImage || "/fallback-avatar.png"}
+                        src={item.authorImage}
                         className="lazy"
-                        alt={item.authorName || "author"}
+                        alt="author"
                       />
                       <i className="fa fa-check"></i>
                     </Link>
                   </div>
 
+                  
                   <div className="nft__item_wrap">
-                    <Link
-                      to={`/item-details/${safeLink(item.nftId)}`}
-                      aria-label={`Go to ${item.title || "item"} details`}
-                    >
+                    <Link to={`/item-details/${item.nftId}`}>
                       <img
-                        src={item.nftImage || "/fallback-item.png"}
+                        src={item.nftImage}
                         className="lazy nft__item_preview"
-                        alt={item.title || "item"}
+                        alt={item.title}
                       />
                     </Link>
                   </div>
 
-                  {item.expiryDate && <Countdown expiryDate={Number(item.expiryDate)} />}
+                  
+                  {item.expiryDate && (
+                    <Countdown expiryDate={Number(item.expiryDate)} />
+                  )}
 
+                  
                   <div className="nft__item_info">
-                    <Link
-                      to={`/item-details/${safeLink(item.nftId)}`}
-                      aria-label={`Go to ${item.title || "item"} details`}
-                    >
-                      <h4>{item.title || "Untitled"}</h4>
+
+                    <Link to={`/item-details/${item.nftId}`}>
+                      <h4>{item.title}</h4>
                     </Link>
-                    <div className="nft__item_price">{item.price || 0} ETH</div>
+
+                    <div className="nft__item_price">
+                      {item.price} ETH
+                    </div>
+
                     <div className="nft__item_like">
                       <i className="fa fa-heart"></i>
-                      <span>{item.likes || 0}</span>
+                      <span>{item.likes}</span>
                     </div>
+
                   </div>
+
                 </div>
               </div>
             ))}
           </OwlCarousel>
         )}
+
       </div>
     </section>
   );
