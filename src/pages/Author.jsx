@@ -26,11 +26,11 @@ const Author = () => {
           wallet: data.wallet,
         });
 
-        setFollowersCount(data.followers); 
+        setFollowersCount(data.followers);
         setNfts(data.nftCollection || []);
-        setLoading(false);
       } catch (err) {
         console.error("API Error:", err);
+      } finally {
         setLoading(false);
       }
     };
@@ -47,8 +47,9 @@ const Author = () => {
     setIsFollowing(!isFollowing);
   };
 
-  if (loading) return <div className="container mt-5">Loading author...</div>;
-  if (!author) return <div className="container mt-5">Author not found</div>;
+  if (!loading && !author) {
+    return <div className="container mt-5">Author not found</div>;
+  }
 
   return (
     <div id="wrapper">
@@ -63,44 +64,150 @@ const Author = () => {
           <div className="container">
             <div className="row">
 
+              
               <div className="col-md-12">
                 <div className="d_profile de-flex">
 
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      <img src={author.authorImage} alt={author.authorName} />
-                      <i className="fa fa-check"></i>
+
+                      {loading ? (
+                        <div
+                          style={{
+                            width: "120px",
+                            height: "120px",
+                            borderRadius: "50%",
+                            background: "#e0e0e0"
+                          }}
+                        ></div>
+                      ) : (
+                        <>
+                          <img src={author.authorImage} alt={author.authorName} />
+                          <i className="fa fa-check"></i>
+                        </>
+                      )}
 
                       <div className="profile_name">
                         <h4>
-                          {author.authorName}
-                          <span className="profile_username">
-                            @{author.authorName}
-                          </span>
-                          <span id="wallet" className="profile_wallet">
-                            Wallet: {author.wallet}
-                          </span>
-                          <button id="btn_copy">Copy</button>
+
+                          {loading ? (
+                            <>
+                              <div
+                                style={{
+                                  width: "200px",
+                                  height: "22px",
+                                  background: "#e0e0e0",
+                                  marginBottom: "10px"
+                                }}
+                              ></div>
+
+                              <div
+                                style={{
+                                  width: "150px",
+                                  height: "16px",
+                                  background: "#e0e0e0",
+                                  marginBottom: "10px"
+                                }}
+                              ></div>
+
+                              <div
+                                style={{
+                                  width: "240px",
+                                  height: "16px",
+                                  background: "#e0e0e0"
+                                }}
+                              ></div>
+                            </>
+                          ) : (
+                            <>
+                              {author.authorName}
+
+                              <span className="profile_username">
+                                @{author.authorName}
+                              </span>
+
+                              <span id="wallet" className="profile_wallet">
+                                Wallet: {author.wallet}
+                              </span>
+
+                              <button id="btn_copy">Copy</button>
+                            </>
+                          )}
+
                         </h4>
                       </div>
+
                     </div>
                   </div>
 
+                 
                   <div className="profile_follow de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_follower">{followersCount} followers</div>
-                      <button onClick={handleFollow} className="btn-main">
-                        {isFollowing ? "Unfollow" : "Follow"}
-                      </button>
+
+                      {loading ? (
+                        <>
+                          <div
+                            style={{
+                              width: "120px",
+                              height: "20px",
+                              background: "#e0e0e0",
+                              marginBottom: "10px"
+                            }}
+                          ></div>
+
+                          <div
+                            style={{
+                              width: "110px",
+                              height: "40px",
+                              background: "#e0e0e0",
+                              borderRadius: "6px"
+                            }}
+                          ></div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="profile_follower">
+                            {followersCount} followers
+                          </div>
+
+                          <button onClick={handleFollow} className="btn-main">
+                            {isFollowing ? "Unfollow" : "Follow"}
+                          </button>
+                        </>
+                      )}
+
                     </div>
                   </div>
 
                 </div>
               </div>
 
+              
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems items={nfts} author={author} authorId={authorId}/>
+
+                  {loading ? (
+                    <div className="row mt-4">
+                      {[...Array(4)].map((_, index) => (
+                        <div key={index} className="col-lg-3 col-md-6 mb30">
+                          <div
+                            style={{
+                              height: "250px",
+                              background: "#e0e0e0",
+                              borderRadius: "10px"
+                            }}
+                          ></div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <AuthorItems
+                      items={nfts}
+                      author={author}
+                      authorId={authorId}
+                    />
+                  )}
+
                 </div>
               </div>
 
