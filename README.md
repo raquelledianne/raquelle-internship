@@ -10,12 +10,6 @@ A blockchain-inspired digital marketplace platform where users can explore, crea
 
 ---
 
-## 📸 Screenshots
-### 🎨 Marketplace Interface
-![Ultraverse Marketplace](./public/screenshots/ultraverse-market.png)
-
----
-
 ## 🧠 Overview
 
 **Ultraverse** is a conceptual NFT marketplace that simulates a Web3-style ecosystem. Users can browse digital assets, view marketplace listings, and experience a modern trading interface inspired by blockchain applications.
